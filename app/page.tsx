@@ -7,37 +7,32 @@ export default function Home() {
   const [initEnter, setInitEnter] = useState(false);
   const [htmlContent, setHtmlContent] = useState('');
 
-  useEffect(() => {
-    if (!initEnter) {
-      fetch('/api/pugHtml')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.text();
-        })
-        .then(data => {
-          let parsedData = JSON.parse(data);
-          setHtmlContent(parsedData.htmlContent);
-          setInitEnter(true);
-        })
-        .catch(error => {
-          console.error('Error fetching pug HTML:', error);
-        });
-    }
-  }, [initEnter]);
+  fetch('/api/pugHtml')
+  .then(response => response.text())
+  .then(data => {
+      let parsedData = JSON.parse(data);
+      setHtmlContent(parsedData.htmlContent);
+      setInitEnter(true);
+  })
+  .catch(error => {
+      console.error('Error fetching pug HTML:', error);
+  });
 
   useEffect(() => {
-    if (initEnter) {
-      init();
-      return () => {
-      };
-    }
-  }, [initEnter]); // Depend on initEnter to call init only after it's set to true
+      if (initEnter) {
+        init();
+        return () => {
+        };
+      }
+    }, [initEnter]); 
 
-let scene, camera, renderer, container;
+let scene: THREE.Scene;
+let camera: THREE.PerspectiveCamera;
+let renderer: THREE.WebGLRenderer;
+let container: HTMLElement | null;
 let start = Date.now();
-let _width, _height;
+let _width: number;
+let _height: number;
 
 
 function init() {
@@ -50,7 +45,7 @@ function init() {
   animation();
 }
 
-function createWorld(Theme) {
+function createWorld(Theme: any) {
   console.log("createWorld started.")
   _width = window.innerWidth;
   _height= window.innerHeight;
@@ -65,7 +60,7 @@ function createWorld(Theme) {
   renderer = new THREE.WebGLRenderer({antialias:true, alpha:false});
   renderer.setSize(_width, _height);
   //---
-  container = document.getElementById("container");
+  container = document.getElementById("container") as HTMLElement;
   container.appendChild(renderer.domElement);
   //---
   window.addEventListener('resize', onWindowResize, false);
@@ -81,59 +76,71 @@ function onWindowResize() {
   console.log('- resize -');
 }
 
-let mat;
-let primitiveElement = function() {
-  this.mesh = new THREE.Object3D();
-  mat = new THREE.ShaderMaterial( {
-    wireframe: false,
-    //fog: true,
-    uniforms: {
-      time: {
-        type: "f",
-        value: 0.0
-      },
-      pointscale: {
-        type: "f",
-        value: 0.0
-      },
-      decay: {
-        type: "f",
-        value: 0.0
-      },
-      complex: {
-        type: "f",
-        value: 0.0
-      },
-      waves: {
-        type: "f",
-        value: 0.0
-      },
-      eqcolor: {
-        type: "f",
-        value: 0.0
-      },
-      fragment: {
-        type: "i",
-        value: true
-      },
-      redhell: {
-        type: "i",
-        value: true
-      }
-    },
-    vertexShader: document.getElementById( 'vertexShader' ).textContent,
-    fragmentShader: document.getElementById( 'fragmentShader' ).textContent
-  });
-  let geo = new THREE.IcosahedronBufferGeometry(3, 7);
-  let mesh = new THREE.Points(geo, mat);
+let mat: THREE.ShaderMaterial;
 
-  this.mesh.add(mesh);
+let _primitive: PrimitiveElement;
+class PrimitiveElement {
+  mesh: THREE.Object3D;
+  constructor(_vertexShader: any, _fragmentShader: any) {
+    this.mesh = new THREE.Object3D();
+    // console.log("document.getElementById('vertexShader'): ", document.getElementById('vertexShader'))
+    // console.log("document.getElementById('fragmentShader'): ", document.getElementById('fragmentShader'))
+    console.log("_vertexShader: ", _vertexShader)
+    console.log("_fragmentShader: ", _fragmentShader)
+    mat = new THREE.ShaderMaterial({
+      wireframe: false,
+      //fog: true,
+      uniforms: {
+        time: {
+          type: "f",
+          value: 0.0
+        },
+        pointscale: {
+          type: "f",
+          value: 0.0
+        },
+        decay: {
+          type: "f",
+          value: 0.0
+        },
+        complex: {
+          type: "f",
+          value: 0.0
+        },
+        waves: {
+          type: "f",
+          value: 0.0
+        },
+        eqcolor: {
+          type: "f",
+          value: 0.0
+        },
+        fragment: {
+          type: "i",
+          value: true
+        },
+        redhell: {
+          type: "i",
+          value: true
+        }
+      },
+      vertexShader: _vertexShader?.textContent || '',
+      fragmentShader: _fragmentShader?.textContent || ''
+    }); 
+    
+    let mesh: THREE.Points;
+    let geo = new THREE.IcosahedronBufferGeometry(3, 7);
+
+    const bufferGeo: THREE.BufferGeometry = geo as THREE.BufferGeometry;
+    mesh = new THREE.Points(bufferGeo, mat);
+
+    this.mesh.add(mesh);
+  }
 }
 
-let _primitive;
 function createPrimitive() {
-  console.log("createPrimitive started.")
-  _primitive = new primitiveElement();
+  console.log("createPrimitive started.");
+  _primitive = new PrimitiveElement(document.getElementById('vertexShader'), document.getElementById('fragmentShader'));
   scene.add(_primitive.mesh);
 }
 
@@ -155,34 +162,6 @@ let options = {
   }
 }
 
-function createGUI() {
-  console.log("createGUI started.")
-  let gui = new dat.GUI();
-  let camGUI = gui.addFolder('Camera');
-  //cam.add(, 'speed', 0.0, 30.00).listen();
-  camGUI.add(camera.position, 'z', 3, 20).name('Zoom').listen();
-  camGUI.add(options.perlin, 'vel', 0.000, 0.02).name('Velocity').listen();
-  //camGUI.open();
-  
-  let mathGUI = gui.addFolder('Math Options');
-  mathGUI.add(options.spin, 'sinVel', 0.0, 0.50).name('Sine').listen();
-  mathGUI.add(options.spin, 'ampVel', 0.0, 90.00).name('Amplitude').listen();
-  //mathGUI.open();
-  
-  let perlinGUI = gui.addFolder('Setup Perlin Noise');
-  perlinGUI.add(options.perlin, 'perlins', 1.0, 5.0).name('Size').step(1);
-  perlinGUI.add(options.perlin, 'speed', 0.00000, 0.00050).name('Speed').listen();
-  perlinGUI.add(options.perlin, 'decay', 0.0, 1.00).name('Decay').listen();
-  perlinGUI.add(options.perlin, 'waves', 0.0, 20.00).name('Waves').listen();
-  perlinGUI.add(options.perlin, 'fragment', true).name('Fragment');
-  perlinGUI.add(options.perlin, 'complex', 0.1, 1.00).name('Complex').listen();
-  perlinGUI.add(options.perlin, 'redhell', true).name('Electroflow');
-  perlinGUI.add(options.perlin, 'eqcolor', 0.0, 15.0).name('Hue').listen();
-  perlinGUI.open();
-}
-
-//--------------------------------------------------------------------
-
 function animation() {
   requestAnimationFrame(animation);
   let performance = Date.now() * 0.003;
@@ -199,6 +178,16 @@ function animation() {
   mat.uniforms['fragment'].value = options.perlin.fragment;
   mat.uniforms['redhell'].value = options.perlin.redhell;
   //---
+
+  // console.log("mat.uniforms['time'].value: ", mat.uniforms['time'].value);
+  // console.log("mat.uniforms['pointscale'].value: ", mat.uniforms['pointscale'].value);
+  // console.log("mat.uniforms['decay'].value: ", mat.uniforms['decay'].value);
+  // console.log("mat.uniforms['complex'].value: ", mat.uniforms['complex'].value);
+  // console.log("mat.uniforms['waves'].value: ", mat.uniforms['waves'].value);
+  // console.log("mat.uniforms['eqcolor'].value: ", mat.uniforms['eqcolor'].value);
+  // console.log("mat.uniforms['fragment'].value: ", mat.uniforms['fragment'].value);
+  // console.log("mat.uniforms['redhell'].value: ", mat.uniforms['redhell'].value);
+  
   camera.lookAt(scene.position);
   renderer.render(scene, camera);
 }

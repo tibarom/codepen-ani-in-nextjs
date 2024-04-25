@@ -34,6 +34,9 @@ devDependencies:
   '@types/react':
     specifier: ^18.2.79
     version: 18.2.79
+  '@types/three':
+    specifier: 0.89.0
+    version: 0.89.0
   eslint:
     specifier: ^8
     version: 8.57.0
@@ -311,6 +314,16 @@ packages:
     dependencies:
       '@types/prop-types': 15.7.12
       csstype: 3.1.3
+    dev: true
+
+  /@types/three@0.89.0:
+    resolution: {integrity: sha512-Qr6JLxxu2MQkE1CUXI+6xk3klMH/QSBoNiniud/smgFDUTMPBfWfFEQcT7rwv5rO5Nsm6sd7ePRLsdBcx2V3Hw==}
+    dependencies:
+      '@types/webvr-api': 0.0.41
+    dev: true
+
+  /@types/webvr-api@0.0.41:
+    resolution: {integrity: sha512-QCGGQR2kpzXLIifvXpPghGMsINT8J4G+qhGungG3AH7P4BgBedRvG9OknttF2prCGLY4iSU1hxchddGC5g99uA==}
     dev: true
 
   /@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5):

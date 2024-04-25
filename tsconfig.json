@@ -2,6 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./extensions/tsconfig.json",
   "compilerOptions": {
+    "typeRoots": ["./types", "./node_modules/@types"],
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

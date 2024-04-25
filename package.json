@@ -20,6 +20,7 @@
     "@types/node": "^20.12.7",
     "@types/pug": "^2.0.10",
     "@types/react": "^18.2.79",
+    "@types/three": "0.89.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "typescript": "^5.4.5"
