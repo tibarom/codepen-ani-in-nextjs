@@ -34,7 +34,6 @@ let start = Date.now();
 let _width: number;
 let _height: number;
 
-
 function init() {
   let Theme = {_darkred: 0x000000}
   console.log("init started.")
@@ -83,10 +82,6 @@ class PrimitiveElement {
   mesh: THREE.Object3D;
   constructor(_vertexShader: any, _fragmentShader: any) {
     this.mesh = new THREE.Object3D();
-    // console.log("document.getElementById('vertexShader'): ", document.getElementById('vertexShader'))
-    // console.log("document.getElementById('fragmentShader'): ", document.getElementById('fragmentShader'))
-    console.log("_vertexShader: ", _vertexShader)
-    console.log("_fragmentShader: ", _fragmentShader)
     mat = new THREE.ShaderMaterial({
       wireframe: false,
       //fog: true,
@@ -177,17 +172,7 @@ function animation() {
   mat.uniforms['eqcolor'].value = options.perlin.eqcolor;
   mat.uniforms['fragment'].value = options.perlin.fragment;
   mat.uniforms['redhell'].value = options.perlin.redhell;
-  //---
 
-  // console.log("mat.uniforms['time'].value: ", mat.uniforms['time'].value);
-  // console.log("mat.uniforms['pointscale'].value: ", mat.uniforms['pointscale'].value);
-  // console.log("mat.uniforms['decay'].value: ", mat.uniforms['decay'].value);
-  // console.log("mat.uniforms['complex'].value: ", mat.uniforms['complex'].value);
-  // console.log("mat.uniforms['waves'].value: ", mat.uniforms['waves'].value);
-  // console.log("mat.uniforms['eqcolor'].value: ", mat.uniforms['eqcolor'].value);
-  // console.log("mat.uniforms['fragment'].value: ", mat.uniforms['fragment'].value);
-  // console.log("mat.uniforms['redhell'].value: ", mat.uniforms['redhell'].value);
-  
   camera.lookAt(scene.position);
   renderer.render(scene, camera);
 }
