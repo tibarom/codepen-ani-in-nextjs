@@ -1,13 +1,20 @@
-// shader.frag
-precision mediump float;
-
-varying vec2 vUv;
-varying float noise;
+varying float qnoise;
 
 uniform float time;
-uniform sampler2D texture;
+uniform bool redhell;
 
 void main() {
-  vec3 color = texture2D(texture, vUv + noise).rgb;
-  gl_FragColor = vec4(color, 1.0);
+  float r, g, b;
+
+  
+  if (!redhell == true) {
+    r = cos(qnoise + 0.5);
+    g = cos(qnoise - 0.5);
+    b = 0.0;
+  } else {
+    r = cos(qnoise + 0.5);
+    g = cos(qnoise - 0.5);
+    b = abs(qnoise);
+  }
+  gl_FragColor = vec4(r, g, b, 1.0);
 }
