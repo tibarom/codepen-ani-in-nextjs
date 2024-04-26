@@ -14,7 +14,8 @@
     "pug": "^3.0.2",
     "react": "^18",
     "react-dom": "^18",
-    "three": "0.89.0"
+    "three": "0.89.0",
+    "tailwindcss-animate": "^1.0.5"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
@@ -23,6 +24,9 @@
     "@types/three": "0.89.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.24",
+    "autoprefixer": "^10.4.14"
   }
 }

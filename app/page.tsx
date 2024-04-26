@@ -7,16 +7,18 @@ export default function Home() {
   const [initEnter, setInitEnter] = useState(false);
   const [htmlContent, setHtmlContent] = useState('');
 
-  fetch('/api/pugHtml')
-  .then(response => response.text())
-  .then(data => {
-      let parsedData = JSON.parse(data);
-      setHtmlContent(parsedData.htmlContent);
-      setInitEnter(true);
-  })
-  .catch(error => {
-      console.error('Error fetching pug HTML:', error);
-  });
+  useEffect(() => {
+    fetch('/api/pugHtml')
+      .then(response => response.text())
+      .then(data => {
+          let parsedData = JSON.parse(data);
+          setHtmlContent(parsedData.htmlContent);
+          setInitEnter(true);
+      })
+      .catch(error => {
+          console.error('Error fetching pug HTML:', error);
+      });
+  }, []); // 의존성 배열을 비워서 컴포넌트가 마운트될 때 한 번만 실행되게 합니다.
 
   useEffect(() => {
       if (initEnter) {
