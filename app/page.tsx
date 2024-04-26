@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import * as THREE from 'three';
+import ShaderComponent from './ShaderComponent';
 
 export default function Home() {
   const [initEnter, setInitEnter] = useState(false);
@@ -181,6 +182,7 @@ function animation() {
 
 return (
   <div>
+    {/* <ShaderComponent></ShaderComponent> */}
       <div id="container" />
       <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
   </div>

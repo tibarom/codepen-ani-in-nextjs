@@ -33,6 +33,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".contentlayer/generated"
-  ],
+, "app/page.ts", "app/page.ts", "app/page.jsx", "app/aa.js"  ],
   "exclude": ["node_modules", "./scripts/build-registry.mts"]
 }
